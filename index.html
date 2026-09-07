@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaiwanSMP | 無政府 禁外掛 伺服器</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 圖示 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+        .glow {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- 導覽列 -->
+    <nav class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="text-2xl font-black tracking-wider text-blue-500">Taiwan<span class="text-white">SMP</span></a>
+            <div class="space-x-6 text-sm font-semibold">
+                <a href="#about" class="hover:text-blue-400 transition">伺服器特色</a>
+                <a href="#staff" class="hover:text-blue-400 transition">工作人員</a>
+                <a href="#vip" class="hover:text-blue-400 transition">付費身分</a>
+                <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2 rounded-lg transition"><i class="fa-brands fa-discord mr-1"></i> Discord</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 首頁 Hero Section -->
+    <section id="about" class="max-w-6xl mx-auto px-4 py-20 text-center">
+        <div class="inline-block bg-blue-900/40 border border-blue-500/30 text-blue-400 font-mono text-sm px-4 py-1.5 rounded-full mb-6">
+            版本：Minecraft 1.21.11
+        </div>
+        <h1 class="text-5xl md:text-6xl font-black mb-6 tracking-tight">純粹生存 <span class="text-blue-500">無政府</span> 嚴禁外掛</h1>
+        <p class="text-slate-400 text-lg max-w-2xl mx-auto mb-10">
+            體驗最真實的生存挑戰，開放無限制自由發展，但堅決打擊外掛行為，提供公平且震撼的遊戲環境。
+        </p>
+
+        <!-- 一鍵複製 IP -->
+        <div class="bg-slate-800/80 border border-slate-700 p-4 rounded-xl max-w-md mx-auto flex justify-between items-center glow mb-12">
+            <div class="text-left">
+                <span class="text-xs text-slate-400 uppercase tracking-widest font-bold">伺服器 IP</span>
+                <p id="server-ip" class="font-mono text-lg font-bold text-blue-400">taiwansmp.tw.kg</p>
+            </div>
+            <button onclick="copyIP()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-bold text-sm transition flex items-center gap-2">
+                <i class="fa-regular fa-copy"></i>
+                <span id="copy-btn-text">複製 IP</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- 工作人員頁面 -->
+    <section id="staff" class="bg-slate-900/50 py-20 border-y border-slate-800">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12"><i class="fa-solid fa-users text-blue-500 mr-2"></i>管理團隊</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                
+                <!-- Dusky -->
+                <div class="bg-slate-800/50 border border-slate-700/60 p-6 rounded-2xl flex items-center gap-6">
+                    <img src="https://mc-heads.net/avatar/Dusky" alt="Dusky" class="w-16 h-16 rounded-xl border-2 border-blue-500">
+                    <div>
+                        <h3 class="text-xl font-bold">DuskyL</h3>
+                        <span class="bg-red-500/20 text-red-400 border border-red-500/30 text-xs px-2.5 py-0.5 rounded font-semibold inline-block mt-1">伺服器服主</span>
+                        <p class="text-slate-400 text-sm mt-2">負責伺服器整體營運、玩法規劃與社群管理。</p>
+                    </div>
+                </div>
+
+                <!-- Young -->
+                <div class="bg-slate-800/50 border border-slate-700/60 p-6 rounded-2xl flex items-center gap-6">
+                    <img src="https://mc-heads.net/avatar/Young" alt="Young" class="w-16 h-16 rounded-xl border-2 border-emerald-500">
+                    <div>
+                        <h3 class="text-xl font-bold">Young</h3>
+                        <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded font-semibold inline-block mt-1">機主</span>
+                        <p class="text-slate-400 text-sm mt-2">負責硬體設施維護、網路節點優化與伺服器效能監控。</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- 付費身分 (VIP) 頁面 -->
+    <section id="vip" class="py-20">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4"><i class="fa-solid fa-gem text-amber-400 mr-2"></i>贊助與付費身分</h2>
+            <p class="text-slate-400 text-center mb-12">支持伺服器穩定運作，獲得專屬身分與額外實用福利</p>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                
+                <!-- + 身分 -->
+                <div class="bg-slate-800/40 border border-slate-700 p-8 rounded-2xl text-center flex flex-col justify-between hover:border-blue-500 transition">
+                    <div>
+                        <h3 class="text-2xl font-black text-blue-400 mb-2">+ 身分</h3>
+                        <div class="text-4xl font-extrabold mb-6">NT$ 150</div>
+                        <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>10 個 Home 點</b></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                        </ul>
+                    </div>
+                    <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 rounded-xl transition text-sm">前往贊助</a>
+                </div>
+
+                <!-- ++ 身分 -->
+                <div class="bg-slate-800/80 border-2 border-indigo-500 p-8 rounded-2xl text-center flex flex-col justify-between relative glow">
+                    <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-indigo-600 text-xs uppercase font-extrabold px-3 py-1 rounded-full">熱門推薦</div>
+                    <div>
+                        <h3 class="text-2xl font-black text-indigo-400 mb-2">++ 身分</h3>
+                        <div class="text-4xl font-extrabold mb-6">NT$ 500</div>
+                        <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>15 個 Home 點</b></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                        </ul>
+                    </div>
+                    <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition text-sm">前往贊助</a>
+                </div>
+
+                <!-- +++ 身分 -->
+                <div class="bg-slate-800/40 border border-slate-700 p-8 rounded-2xl text-center flex flex-col justify-between hover:border-amber-400 transition">
+                    <div>
+                        <h3 class="text-2xl font-black text-amber-400 mb-2">+++ 身分</h3>
+                        <div class="text-4xl font-extrabold mb-6">NT$ 1000</div>
+                        <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>35 個 Home 點</b></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                        </ul>
+                    </div>
+                    <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2.5 rounded-xl transition text-sm">前往贊助</a>
+                </div>
+
+            </div>
+
+            <!-- Discord 提示備註 -->
+            <div class="mt-12 text-center text-slate-400 text-sm">
+                <p>💡 更多詳細福利與贊助方式，請前往 <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="text-indigo-400 underline font-semibold hover:text-indigo-300">Discord 群組</a> 開啟客服單查看。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 頁尾 -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-8 text-center text-slate-500 text-xs">
+        <p>&copy; 2026 TaiwanSMP. All rights reserved. Not an official Minecraft product.</p>
+    </footer>
+
+    <!-- 一鍵複製 IP 腳本 -->
+    <script>
+        function copyIP() {
+            const ip = document.getElementById("server-ip").innerText;
+            navigator.clipboard.writeText(ip).then(() => {
+                const btnText = document.getElementById("copy-btn-text");
+                btnText.innerText = "已複製！";
+                setTimeout(() => {
+                    btnText.innerText = "複製 IP";
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
