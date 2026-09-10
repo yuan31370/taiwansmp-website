@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaiwanSMP | 無政府 禁外掛 伺服器</title>
+    <!-- 分頁標籤小圖示 (Favicon) -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 圖示 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Pixel Font (VT323) 擬真麥塊字型 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* 麥塊經典字體類別 */
+        .mc-font {
+            font-family: 'VT323', monospace;
+        }
+
+        /* ═══════════════════════════════════════════
+           麥塊原版 GUI 按鈕核心樣式 (3D 像素邊框與陰影)
+           ═══════════════════════════════════════════ */
+        .mc-btn {
+            font-family: 'VT323', monospace;
+            font-size: 1.35rem;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #707070;
+            border: 3px solid #000000;
+            /* 麥塊原版上/左白光，下/右深影 */
+            box-shadow: inset -4px -4px 0px 0px #3c3c3c, inset 4px 4px 0px 0px #a8a8a8;
+            color: #e0e0e0;
+            text-shadow: 2px 2px 0px #202020;
+            cursor: pointer;
+            user-select: none;
+            text-decoration: none;
+            transition: none;
+            padding: 8px 16px;
+        }
+
+        /* 麥塊按鈕 Hover (滑鼠懸停)：變亮 + 經典黃字 */
+        .mc-btn:hover {
+            background-color: #8b8b8b;
+            box-shadow: inset -4px -4px 0px 0px #3c3c3c, inset 4px 4px 0px 0px #c6c6c6;
+            color: #ffffa0; /* 麥塊選單標準亮黃色文字 */
+            text-shadow: 2px 2px 0px #3f3f00;
+        }
+
+        /* 麥塊按鈕 Active (按下瞬間)：邊框反轉，呈凹陷效果 */
+        .mc-btn:active {
+            background-color: #555555;
+            box-shadow: inset 4px 4px 0px 0px #2a2a2a, inset -4px -4px 0px 0px #888888;
+            color: #a0a0a0;
+            text-shadow: 2px 2px 0px #101010;
+        }
+
+        /* 藍色系麥塊按鈕 (用於重點按鈕) */
+        .mc-btn-blue {
+            background-color: #2563eb;
+            box-shadow: inset -4px -4px 0px 0px #1e3a8a, inset 4px 4px 0px 0px #60a5fa;
+            color: #ffffff;
+        }
+        .mc-btn-blue:hover {
+            background-color: #3b82f6;
+            box-shadow: inset -4px -4px 0px 0px #1e3a8a, inset 4px 4px 0px 0px #93c5fd;
+            color: #ffffa0;
+        }
+
+        /* 金色/紫色系麥塊按鈕 */
+        .mc-btn-gold {
+            background-color: #d97706;
+            box-shadow: inset -4px -4px 0px 0px #78350f, inset 4px 4px 0px 0px #fbbf24;
+            color: #ffffff;
+        }
+        .mc-btn-gold:hover {
+            background-color: #f59e0b;
+            box-shadow: inset -4px -4px 0px 0px #78350f, inset 4px 4px 0px 0px #fde047;
+            color: #ffffa0;
+        }
+
+        .mc-btn-indigo {
+            background-color: #4f46e5;
+            box-shadow: inset -4px -4px 0px 0px #312e81, inset 4px 4px 0px 0px #818cf8;
+            color: #ffffff;
+        }
+        .mc-btn-indigo:hover {
+            background-color: #6366f1;
+            box-shadow: inset -4px -4px 0px 0px #312e81, inset 4px 4px 0px 0px #a5b4fc;
+            color: #ffffa0;
+        }
+
+        .glow {
+            box-shadow: 0 0 35px rgba(59, 130, 246, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- 導覽列 -->
+    <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center relative">
+            <!-- 左側 Logo + 檔名 -->
+            <a href="#" class="flex items-center gap-3">
+                <img src="logo.png" alt="TaiwanSMP Logo" class="h-10 w-auto border-2 border-black">
+                <span class="text-xl md:text-2xl font-black tracking-wider text-blue-500">Taiwan<span class="text-white">SMP</span></span>
+            </a>
+            
+            <!-- 麥塊風漢堡選單按鈕 -->
+            <button id="menu-btn" aria-label="Toggle Menu" class="mc-btn px-3 py-1 text-xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- 隱藏的下拉功能表（每個選項都是一個麥塊按鈕） -->
+        <div id="dropdown-menu" class="hidden absolute top-full left-0 w-full bg-slate-900/95 backdrop-blur-xl border-b-4 border-black p-4 shadow-2xl">
+            <div class="flex flex-col max-w-xl mx-auto gap-2">
+                <a href="#hero" class="menu-link mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-house w-6 text-slate-300"></i> 主頁
+                </a>
+                <a href="#vip" class="menu-link mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-gem w-6 text-amber-400"></i> 贊助資訊
+                </a>
+                <a href="#guide" class="menu-link mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-compass w-6 text-emerald-400"></i> 伺服器導覽
+                </a>
+                <a href="#rules" class="menu-link mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-shield-halved w-6 text-red-400"></i> 規則
+                </a>
+                <a href="#shop" class="menu-link mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-store w-6 text-yellow-400"></i> 伺服器內商店
+                </a>
+                <a href="#staff" class="menu-link mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-code w-6 text-purple-400"></i> 開發人員 (DuskyL & Young)
+                </a>
+                <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="menu-link mc-btn mc-btn-indigo w-full justify-start gap-3">
+                    <i class="fa-brands fa-discord w-6 text-white"></i> 官方 Discord 群組
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要內容區 -->
+    <main class="flex-grow">
+        
+        <!-- 主頁面：伺服器 Logo + 純粹簡介 + IP 複製框 -->
+        <section id="hero" class="max-w-4xl mx-auto px-4 py-16 text-center flex flex-col justify-center items-center min-h-[75vh]">
+            
+            <!-- 首頁中央大 Logo -->
+            <img src="logo.png" alt="TaiwanSMP Logo" class="w-44 md:w-56 mb-6 border-4 border-black shadow-2xl transition-transform hover:scale-105 duration-300">
+
+            <div class="inline-block bg-slate-800 border-2 border-black text-blue-400 mc-font text-xl px-4 py-1 mb-6">
+                Minecraft 1.21.11
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-black mb-4 tracking-tight">
+                Taiwan<span class="text-blue-500">SMP</span>
+            </h1>
+            
+            <p class="text-slate-300 text-base md:text-lg max-w-2xl leading-relaxed mb-8">
+                純粹生存 · 無政府 · 嚴禁外掛<br>
+                體驗最真實的自由生存挑戰，絕不干涉玩家發展，堅決打擊違規外掛行為。
+            </p>
+
+            <!-- 麥塊外框樣式一鍵複製 IP 區塊 -->
+            <div class="bg-slate-800 border-4 border-black p-4 w-full max-w-md flex justify-between items-center glow mb-6">
+                <div class="text-left pl-2">
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-bold block">伺服器 IP</span>
+                    <p id="server-ip" class="mc-font text-2xl font-bold text-blue-400 tracking-wider">taiwansmp.tw.kg</p>
+                </div>
+                <!-- 麥塊按鈕 -->
+                <button onclick="copyIP()" class="mc-btn mc-btn-blue text-lg gap-2">
+                    <i class="fa-regular fa-copy"></i>
+                    <span id="copy-btn-text">複製 IP</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- 贊助資訊 Section -->
+        <section id="vip" class="py-20 bg-slate-900/50 border-t border-slate-800">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-4"><i class="fa-solid fa-gem text-amber-400 mr-2"></i>贊助與身分組</h2>
+                <p class="text-slate-400 text-center mb-12">贊助資金將全數用於伺服器硬體升級與續約</p>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- + 身分 -->
+                    <div class="bg-slate-800/80 border-4 border-black p-8 text-center flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-3xl font-black text-blue-400 mb-2 mc-font">+ 身分</h3>
+                            <div class="text-4xl font-extrabold mb-6 mc-font">NT$ 150</div>
+                            <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>10 個 Home 點</b></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                            </ul>
+                        </div>
+                        <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="mc-btn w-full">前往 Discord 贊助</a>
+                    </div>
+
+                    <!-- ++ 身分 -->
+                    <div class="bg-slate-800 border-4 border-indigo-500 p-8 text-center flex flex-col justify-between relative glow">
+                        <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 border-2 border-black text-xs uppercase font-extrabold px-3 py-1">熱門推薦</div>
+                        <div>
+                            <h3 class="text-3xl font-black text-indigo-400 mb-2 mc-font">++ 身分</h3>
+                            <div class="text-4xl font-extrabold mb-6 mc-font">NT$ 500</div>
+                            <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>15 個 Home 點</b></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                            </ul>
+                        </div>
+                        <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="mc-btn mc-btn-indigo w-full">前往 Discord 贊助</a>
+                    </div>
+
+                    <!-- +++ 身分 -->
+                    <div class="bg-slate-800/80 border-4 border-black p-8 text-center flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-3xl font-black text-amber-400 mb-2 mc-font">+++ 身分</h3>
+                            <div class="text-4xl font-extrabold mb-6 mc-font">NT$ 1000</div>
+                            <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>35 個 Home 點</b></li>
+                                <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                            </ul>
+                        </div>
+                        <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="mc-btn mc-btn-gold w-full">前往 Discord 贊助</a>
+                    </div>
+                </div>
+
+                <p class="text-center text-slate-400 text-sm mt-8">💡 更多詳細權益請至 Discord 開啟客服單諮詢。</p>
+            </div>
+        </section>
+
+        <!-- 開發人員 Section -->
+        <section id="staff" class="py-20 border-t border-slate-800">
+            <div class="max-w-6xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-12"><i class="fa-solid fa-code text-purple-400 mr-2"></i>開發人員與管理團隊</h2>
+                <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                    
+                    <!-- DuskyL -->
+                    <div class="bg-slate-800/50 border-4 border-black p-6 flex items-center gap-6">
+                        <img src="https://mc-heads.net/avatar/DuskyL" alt="DuskyL" class="w-16 h-16 border-2 border-black">
+                        <div>
+                            <h3 class="text-xl font-bold">DuskyL</h3>
+                            <span class="bg-red-500/20 text-red-400 border border-red-500/30 text-xs px-2.5 py-0.5 rounded font-semibold inline-block mt-1">服主 / 開發人員</span>
+                            <p class="text-slate-400 text-sm mt-2">負責伺服器核心規劃、插件開發與營運管理。</p>
+                        </div>
+                    </div>
+
+                    <!-- Young -->
+                    <div class="bg-slate-800/50 border-4 border-black p-6 flex items-center gap-6">
+                        <img src="https://mc-heads.net/avatar/Young" alt="Young" class="w-16 h-16 border-2 border-black">
+                        <div>
+                            <h3 class="text-xl font-bold">Young</h3>
+                            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded font-semibold inline-block mt-1">機主 / 開發人員</span>
+                            <p class="text-slate-400 text-sm mt-2">負責伺服器硬體託管、網路連線優化與效能調校。</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- 伺服器導覽 Section -->
+        <section id="guide" class="py-20 bg-slate-900/50 border-t border-slate-800">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold mb-6"><i class="fa-solid fa-compass text-emerald-400 mr-2"></i>伺服器導覽</h2>
+                <p class="text-slate-300 leading-relaxed">
+                    TaiwanSMP 提供最貼近原味的無政府生存體驗。玩家可在廣闊的世界中自由探索、建立基地或展開競爭。我們無額外領地限制，一切發展皆由玩家決定！
+                </p>
+            </div>
+        </section>
+
+        <!-- 規則 Section -->
+        <section id="rules" class="py-20 border-t border-slate-800">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-3xl font-bold text-center mb-8"><i class="fa-solid fa-shield-halved text-red-400 mr-2"></i>伺服器規則</h2>
+                <ul class="space-y-4 max-w-2xl mx-auto text-slate-300">
+                    <li class="bg-slate-800/40 border-4 border-black p-4 flex items-start gap-3">
+                        <i class="fa-solid fa-ban text-red-400 mt-1"></i>
+                        <span><b>嚴禁任何外掛程式</b>：包含但不限於 Fly、X-Ray、KillAura 等影響公平性之模組，違者永久封鎖。</span>
+                    </li>
+                    <li class="bg-slate-800/40 border-4 border-black p-4 flex items-start gap-3">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-1"></i>
+                        <span><b>自由生存</b>：允許遊戲內合理機制下的掠奪與戰鬥，請自行保護基地安全。</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 伺服器內商店 Section -->
+        <section id="shop" class="py-20 bg-slate-900/50 border-t border-slate-800">
+            <div class="max-w-4xl mx-auto px-4 text-center">
+                <h2 class="text-3xl font-bold mb-6"><i class="fa-solid fa-store text-yellow-400 mr-2"></i>伺服器內商店</h2>
+                <p class="text-slate-300">進入遊戲後可使用指令 <code class="bg-slate-800 text-yellow-400 px-3 py-1 border border-black mc-font text-lg font-bold">/shop</code> 或 <code class="bg-slate-800 text-yellow-400 px-3 py-1 border border-black mc-font text-lg font-bold">/market</code> 進行玩家間的物品交易。</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-8 text-center text-slate-500 text-xs">
+        <p>&copy; 2026 TaiwanSMP. All rights reserved. Not an official Minecraft product.</p>
+    </footer>
+
+    <!-- 腳本邏輯 -->
+    <script>
+        // 一鍵複製 IP 邏輯
+        function copyIP() {
+            const ip = document.getElementById("server-ip").innerText;
+            navigator.clipboard.writeText(ip).then(() => {
+                const btnText = document.getElementById("copy-btn-text");
+                btnText.innerText = "已複製！";
+                setTimeout(() => {
+                    btnText.innerText = "複製 IP";
+                }, 2000);
+            });
+        }
+
+        // 漢堡選單開關邏輯
+        const menuBtn = document.getElementById('menu-btn');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const menuIcon = menuBtn.querySelector('i');
+        const menuLinks = document.querySelectorAll('.menu-link');
+
+        menuBtn.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
+            if (dropdownMenu.classList.contains('hidden')) {
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            } else {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            }
+        });
+
+        // 點選任何菜單選項後自動關閉選單
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                dropdownMenu.classList.add('hidden');
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            });
+        });
+    </script>
+</body>
+</html>
