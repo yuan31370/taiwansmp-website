@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaiwanSMP | 無政府 禁外掛 伺服器</title>
+    <!-- 分頁標籤小圖示 -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 圖示 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Pixel Font (VT323) 擬真麥塊字型 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* 麥塊經典字體 */
+        .mc-font {
+            font-family: 'VT323', monospace;
+        }
+
+        /* 麥塊 GUI 按鈕核心樣式 */
+        .mc-btn {
+            font-family: 'VT323', monospace;
+            font-size: 1.35rem;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background-color: #707070;
+            border: 3px solid #000000;
+            box-shadow: inset -4px -4px 0px 0px #3c3c3c, inset 4px 4px 0px 0px #a8a8a8;
+            color: #e0e0e0;
+            text-shadow: 2px 2px 0px #202020;
+            cursor: pointer;
+            user-select: none;
+            text-decoration: none;
+            padding: 8px 16px;
+        }
+
+        .mc-btn:hover {
+            background-color: #8b8b8b;
+            box-shadow: inset -4px -4px 0px 0px #3c3c3c, inset 4px 4px 0px 0px #c6c6c6;
+            color: #ffffa0;
+            text-shadow: 2px 2px 0px #3f3f00;
+        }
+
+        .mc-btn:active {
+            background-color: #555555;
+            box-shadow: inset 4px 4px 0px 0px #2a2a2a, inset -4px -4px 0px 0px #888888;
+            color: #a0a0a0;
+        }
+
+        /* 特殊配色按鈕 */
+        .mc-btn-blue {
+            background-color: #2563eb;
+            box-shadow: inset -4px -4px 0px 0px #1e3a8a, inset 4px 4px 0px 0px #60a5fa;
+            color: #ffffff;
+        }
+        .mc-btn-blue:hover {
+            background-color: #3b82f6;
+            color: #ffffa0;
+        }
+
+        .mc-btn-emerald {
+            background-color: #059669;
+            box-shadow: inset -4px -4px 0px 0px #064e3b, inset 4px 4px 0px 0px #34d399;
+            color: #ffffff;
+        }
+        .mc-btn-emerald:hover {
+            background-color: #10b981;
+            color: #ffffa0;
+        }
+
+        .mc-btn-gold {
+            background-color: #d97706;
+            box-shadow: inset -4px -4px 0px 0px #78350f, inset 4px 4px 0px 0px #fbbf24;
+            color: #ffffff;
+        }
+        .mc-btn-gold:hover {
+            background-color: #f59e0b;
+            color: #ffffa0;
+        }
+
+        .mc-btn-indigo {
+            background-color: #4f46e5;
+            box-shadow: inset -4px -4px 0px 0px #312e81, inset 4px 4px 0px 0px #818cf8;
+            color: #ffffff;
+        }
+        .mc-btn-indigo:hover {
+            background-color: #6366f1;
+            color: #ffffa0;
+        }
+
+        .mc-btn-cyan {
+            background-color: #0891b2;
+            box-shadow: inset -4px -4px 0px 0px #164e63, inset 4px 4px 0px 0px #22d3ee;
+            color: #ffffff;
+        }
+        .mc-btn-cyan:hover {
+            background-color: #06b6d4;
+            color: #ffffa0;
+        }
+
+        .mc-btn-pink {
+            background-color: #db2777;
+            box-shadow: inset -4px -4px 0px 0px #831843, inset 4px 4px 0px 0px #f472b6;
+            color: #ffffff;
+        }
+        .mc-btn-pink:hover {
+            background-color: #ec4899;
+            color: #ffffa0;
+        }
+
+        .glow {
+            box-shadow: 0 0 35px rgba(59, 130, 246, 0.25);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+
+    <!-- 頂部導覽列 -->
+    <nav class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center relative">
+            <!-- 點擊 Logo 可直接回到主頁 -->
+            <button onclick="switchPage('page-hero')" class="flex items-center gap-3 text-left">
+                <img src="logo.png" alt="TaiwanSMP Logo" class="h-10 w-auto border-2 border-black">
+                <span class="text-xl md:text-2xl font-black tracking-wider text-blue-500">Taiwan<span class="text-white">SMP</span></span>
+            </button>
+            
+            <!-- 麥塊風漢堡選單按鈕 -->
+            <button id="menu-btn" aria-label="Toggle Menu" class="mc-btn px-3 py-1 text-xl">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- 隱藏的下拉功能表 -->
+        <div id="dropdown-menu" class="hidden absolute top-full left-0 w-full bg-slate-900/95 backdrop-blur-xl border-b-4 border-black p-4 shadow-2xl">
+            <div class="flex flex-col max-w-xl mx-auto gap-2">
+                <button onclick="switchPage('page-hero')" class="mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-house w-6 text-slate-300"></i> 主頁與導覽
+                </button>
+                <button onclick="switchPage('page-gameplay')" class="mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-gamepad w-6 text-emerald-400"></i> 主要玩法
+                </button>
+                <button onclick="switchPage('page-rules')" class="mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-shield-halved w-6 text-red-400"></i> 伺服器規則
+                </button>
+                <button onclick="switchPage('page-commands')" class="mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-terminal w-6 text-cyan-400"></i> 常用指令
+                </button>
+                <button onclick="switchPage('page-voicechat')" class="mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-microphone w-6 text-pink-400"></i> 語音功能教學
+                </button>
+                <button onclick="switchPage('page-shop')" class="mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-store w-6 text-yellow-400"></i> 伺服器內商店
+                </button>
+                <button onclick="switchPage('page-vip')" class="mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-gem w-6 text-amber-400"></i> 贊助資訊
+                </button>
+                <button onclick="switchPage('page-staff')" class="mc-btn w-full justify-start gap-3">
+                    <i class="fa-solid fa-code w-6 text-purple-400"></i> 開發人員 (DuskyL & Young)
+                </button>
+                <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="mc-btn mc-btn-indigo w-full justify-start gap-3">
+                    <i class="fa-brands fa-discord w-6 text-white"></i> 官方 Discord 群組
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 獨立分頁內容容器 -->
+    <main class="flex-grow">
+        
+        <!-- ================= 1. 主頁面 (簡潔完整導覽區塊) ================= -->
+        <section id="page-hero" class="page-content max-w-4xl mx-auto px-4 py-12 text-center flex flex-col justify-center items-center min-h-[75vh]">
+            <img src="logo.png" alt="TaiwanSMP Logo" class="w-40 md:w-52 mb-6 border-4 border-black shadow-2xl">
+
+            <div class="inline-block bg-slate-800 border-2 border-black text-blue-400 mc-font text-xl px-4 py-1 mb-6">
+                Minecraft 1.21.11
+            </div>
+            
+            <h1 class="text-4xl md:text-6xl font-black mb-6 tracking-tight">
+                Taiwan<span class="text-blue-500">SMP</span>
+            </h1>
+            
+            <!-- 簡潔優化的伺服器導覽區塊 -->
+            <div class="bg-slate-800/90 border-4 border-black p-6 md:p-8 text-left leading-relaxed text-slate-300 space-y-4 w-full max-w-2xl mb-8 shadow-xl">
+                <h2 class="text-2xl font-bold text-center text-emerald-400 border-b border-slate-700 pb-3 mb-4">
+                    <i class="fa-solid fa-compass mr-2"></i>新手快速導覽
+                </h2>
+
+                <p class="text-center font-medium text-slate-200">
+                    歡迎來到 <b>TaiwanSMP</b>！這裡提供最貼近原味的無領地無政府生存體驗。加入前請照著以下步驟快速了解：
+                </p>
+
+                <!-- 步驟 1：特色玩法 -->
+                <div class="bg-slate-900/60 p-4 border-2 border-slate-700 space-y-2">
+                    <div class="font-bold text-emerald-400 flex items-center gap-2">
+                        <span class="bg-emerald-500/20 text-emerald-400 text-xs px-2 py-0.5 border border-emerald-500/40">Step 1</span>
+                        <span>了解伺服器主要玩法</span>
+                    </div>
+                    <p class="text-sm text-slate-300">
+                        探索無領地自由生存、<b>懸賞獵人系統</b>、系統商店物資與嚴格反作弊等核心特色。
+                    </p>
+                    <div class="pt-1">
+                        <button onclick="switchPage('page-gameplay')" class="mc-btn mc-btn-emerald text-sm py-1 px-3">
+                            <i class="fa-solid fa-gamepad mr-1"></i> 查看主要玩法
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步驟 2：查看規則 -->
+                <div class="bg-slate-900/60 p-4 border-2 border-slate-700 space-y-2">
+                    <div class="font-bold text-amber-400 flex items-center gap-2">
+                        <span class="bg-amber-500/20 text-amber-400 text-xs px-2 py-0.5 border border-amber-500/40">Step 2</span>
+                        <span>了解模組限制與規則</span>
+                    </div>
+                    <p class="text-sm text-slate-300">
+                        進入遊戲前<b>請先閱讀規則</b>！了解哪些為允許使用的便利模組，以及嚴禁使用的違法外掛。
+                    </p>
+                    <div class="pt-1">
+                        <button onclick="switchPage('page-rules')" class="mc-btn mc-btn-gold text-sm py-1 px-3">
+                            <i class="fa-solid fa-shield-halved mr-1"></i> 查看詳細規則
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步驟 3：常用指令 -->
+                <div class="bg-slate-900/60 p-4 border-2 border-slate-700 space-y-2">
+                    <div class="font-bold text-cyan-400 flex items-center gap-2">
+                        <span class="bg-cyan-500/20 text-cyan-400 text-xs px-2 py-0.5 border border-cyan-500/40">Step 3</span>
+                        <span>掌握玩家常用指令</span>
+                    </div>
+                    <p class="text-sm text-slate-300">
+                        學會如何設定家（<code class="text-cyan-400 font-mono">/sethome</code>）、發布懸賞（<code class="text-cyan-400 font-mono">/bounty</code>）與商店售物等功能。
+                    </p>
+                    <div class="pt-1">
+                        <button onclick="switchPage('page-commands')" class="mc-btn mc-btn-cyan text-sm py-1 px-3">
+                            <i class="fa-solid fa-terminal mr-1"></i> 查看常用指令
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步驟 4：安裝語音 Mod -->
+                <div class="bg-slate-900/60 p-4 border-2 border-slate-700 space-y-2">
+                    <div class="font-bold text-pink-400 flex items-center gap-2">
+                        <span class="bg-pink-500/20 text-pink-400 text-xs px-2 py-0.5 border border-pink-500/40">Step 4</span>
+                        <span>安裝 Simple Voice Chat 近距離語音 Mod</span>
+                    </div>
+                    <p class="text-sm text-slate-300">
+                        伺服器支援近距離實時語音通話！下載 Mod 即可與周遭玩家即時對話，極大地提升生存與戰術交流體驗。
+                    </p>
+                    <div class="pt-1">
+                        <button onclick="switchPage('page-voicechat')" class="mc-btn mc-btn-pink text-sm py-1 px-3">
+                            <i class="fa-solid fa-microphone mr-1"></i> 查看語音安裝指南
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 步驟 5：探索商店 -->
+                <div class="bg-slate-900/60 p-4 border-2 border-slate-700 space-y-2">
+                    <div class="font-bold text-yellow-400 flex items-center gap-2">
+                        <span class="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-0.5 border border-yellow-500/40">Step 5</span>
+                        <span>探索伺服器商店系統</span>
+                    </div>
+                    <p class="text-sm text-slate-300">
+                        了解如何使用 <code class="text-yellow-400 font-mono">/shop</code> 購買 PvP 物資與生怪籠，以及透過 <code class="text-yellow-400 font-mono">/sellgui</code> 賣出物品換取金幣！
+                    </p>
+                    <div class="pt-1">
+                        <button onclick="switchPage('page-shop')" class="mc-btn text-sm py-1 px-3">
+                            <i class="fa-solid fa-store mr-1"></i> 前往商店介紹
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 麥塊外框樣式一鍵複製 IP 區塊 -->
+            <div class="bg-slate-800 border-4 border-black p-4 w-full max-w-md flex justify-between items-center glow">
+                <div class="text-left pl-2">
+                    <span class="text-xs text-slate-400 uppercase tracking-widest font-bold block">伺服器 IP</span>
+                    <p id="server-ip" class="mc-font text-2xl font-bold text-blue-400 tracking-wider">taiwansmp.tw.kg</p>
+                </div>
+                <button onclick="copyIP()" class="mc-btn mc-btn-blue text-lg gap-2">
+                    <i class="fa-regular fa-copy"></i>
+                    <span id="copy-btn-text">複製 IP</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= 2. 主要玩法頁面 ================= -->
+        <section id="page-gameplay" class="page-content hidden max-w-4xl mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-3">
+                <i class="fa-solid fa-gamepad text-emerald-400 mr-2"></i>主要玩法 Server Gameplay
+            </h2>
+            <p class="text-center text-slate-400 text-sm mb-8">專為喜愛原味生存與自由競技的玩家打造！</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+
+                <!-- 特色 1：自由無領地生存 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-emerald-950 border border-emerald-500/40 flex items-center justify-center text-emerald-400 text-xl font-bold">
+                            <i class="fa-solid fa-skull-crossbones"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-emerald-400">無領地自由生存</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        伺服器無保護領地機制，回歸最原始的麥塊樂趣！隱藏你的基地、防範敵人掠奪，發揮機智與盟友打造屬於你們的秘密帝國。
+                    </p>
+                </div>
+
+                <!-- 特色 2：懸賞獵人系統 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-red-950 border border-red-500/40 flex items-center justify-center text-red-400 text-xl font-bold">
+                            <i class="fa-solid fa-crosshairs"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-red-400">懸賞獵人系統</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        遇到仇人或基地被炸？使用 <code class="text-red-300 font-mono">/bounty</code> 開出高額懸賞！人人都能成賞金獵人，獵殺目標領取懸賞金並登上獵人排行榜。
+                    </p>
+                </div>
+
+                <!-- 特色 3：便利商店與售物系統 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-yellow-950 border border-yellow-500/40 flex items-center justify-center text-yellow-400 text-xl font-bold">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-yellow-400">便利商店與售物系統</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        擁有便利的系統商店（<code class="text-yellow-300 font-mono">/shop</code>），可直接購買 PvP 戰鬥物資、生怪籠等稀有道具；並可使用 <code class="text-yellow-300 font-mono">/sellgui</code> 快捷賣出物資獲利！
+                    </p>
+                </div>
+
+                <!-- 特色 4：純淨公平環境 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 space-y-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-blue-950 border border-blue-500/40 flex items-center justify-center text-blue-400 text-xl font-bold">
+                            <i class="fa-solid fa-shield-cat"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-blue-400">純淨公平環境</h3>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        配備自編反作弊偵測系統，嚴格取締透視、飛行、自動攻擊等作弊外掛，打造真正靠實力說話的公平環境。
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= 3. 語音功能安裝與使用指南頁面 ================= -->
+        <section id="page-voicechat" class="page-content hidden max-w-4xl mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-3">
+                <i class="fa-solid fa-microphone-lines text-pink-400 mr-2"></i>語音功能指南 Voice Chat Guide
+            </h2>
+            <p class="text-center text-slate-400 text-sm mb-8">伺服器語音功能 (Simple Voice Chat) 安裝與使用教學</p>
+
+            <div class="space-y-8">
+
+                <!-- 玩家端安裝教學 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 shadow-xl">
+                    <h3 class="text-xl font-bold text-pink-400 border-b border-pink-500/30 pb-2 mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-gear"></i> ⚙️ 玩家端安裝教學
+                    </h3>
+
+                    <div class="space-y-6">
+                        <!-- 步驟 1 -->
+                        <div class="flex items-start gap-4">
+                            <span class="mc-font text-2xl bg-pink-950 text-pink-300 border border-pink-700 px-3 py-1 font-bold">1</span>
+                            <div class="space-y-2">
+                                <h4 class="font-bold text-slate-200">下載 Mod 檔案</h4>
+                                <p class="text-slate-300 text-sm leading-relaxed">
+                                    請確認你的遊戲版本為 <b>1.21.x</b>，並下載 Simple Voice Chat Mod（Fabric / Forge 版本皆可）：
+                                </p>
+                                <div class="pt-1">
+                                    <a href="https://modrinth.com/mod/simple-voice-chat" target="_blank" class="mc-btn mc-btn-pink text-sm py-1.5 px-4 inline-flex items-center gap-2">
+                                        <i class="fa-solid fa-download"></i> 前往 Modrinth 官方下載頁面
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 步驟 2 -->
+                        <div class="flex items-start gap-4 border-t border-slate-700/60 pt-4">
+                            <span class="mc-font text-2xl bg-pink-950 text-pink-300 border border-pink-700 px-3 py-1 font-bold">2</span>
+                            <div class="space-y-1">
+                                <h4 class="font-bold text-slate-200">放進 mods 資料夾</h4>
+                                <p class="text-slate-300 text-sm leading-relaxed">
+                                    將下載好的 <code class="bg-slate-900 text-pink-300 px-2 py-0.5 border border-slate-700 font-mono text-xs">.jar</code> 檔案放進你電腦的 <code class="bg-slate-900 text-pink-300 px-2 py-0.5 border border-slate-700 font-mono text-xs">.minecraft/mods</code> 資料夾內，並重啟遊戲。
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- 步驟 3 -->
+                        <div class="flex items-start gap-4 border-t border-slate-700/60 pt-4">
+                            <span class="mc-font text-2xl bg-pink-950 text-pink-300 border border-pink-700 px-3 py-1 font-bold">3</span>
+                            <div class="space-y-1">
+                                <h4 class="font-bold text-slate-200">直接進伺服器</h4>
+                                <p class="text-slate-300 text-sm leading-relaxed">
+                                    用原本的伺服器 IP 正常登入遊戲即可！<b>無需手動設定任何 Port 或 IP</b>，伺服器會自動幫你連線語音！
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 遊戲內預設快捷鍵 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 shadow-xl">
+                    <h3 class="text-xl font-bold text-cyan-400 border-b border-cyan-500/30 pb-2 mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad"></i> 🎮 遊戲內預設快捷鍵
+                    </h3>
+
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <!-- Key V -->
+                        <div class="bg-slate-900/80 border-2 border-slate-700 p-4 text-center space-y-2">
+                            <div class="mc-font text-3xl font-bold text-cyan-400 bg-slate-800 border border-cyan-500/40 inline-block px-4 py-1">
+                                按【 V 】鍵
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                開啟語音設定選單<br><span class="text-slate-400">（可調整麥克風音量、喇叭、進行麥克風測試）</span>
+                            </p>
+                        </div>
+
+                        <!-- Key M -->
+                        <div class="bg-slate-900/80 border-2 border-slate-700 p-4 text-center space-y-2">
+                            <div class="mc-font text-3xl font-bold text-amber-400 bg-slate-800 border border-amber-500/40 inline-block px-4 py-1">
+                                按【 M 】鍵
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                快捷切換麥克風<br><span class="text-slate-400">（一鍵靜音 / 開啟麥克風）</span>
+                            </p>
+                        </div>
+
+                        <!-- Key N -->
+                        <div class="bg-slate-900/80 border-2 border-slate-700 p-4 text-center space-y-2">
+                            <div class="mc-font text-3xl font-bold text-red-400 bg-slate-800 border border-red-500/40 inline-block px-4 py-1">
+                                按【 N 】鍵
+                            </div>
+                            <p class="text-xs text-slate-300 leading-relaxed">
+                                一鍵 Deafen<br><span class="text-slate-400">（一鍵靜音他人，取消收聽聲音）</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 常見問題 FAQ -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 shadow-xl">
+                    <h3 class="text-xl font-bold text-amber-400 border-b border-amber-500/30 pb-2 mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-question"></i> ❓ 常見問題 FAQ
+                    </h3>
+
+                    <div class="space-y-4">
+                        <!-- Q1 -->
+                        <div class="bg-slate-900/60 border border-slate-700 p-4 space-y-1.5">
+                            <h4 class="font-bold text-amber-300 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-circle-info text-amber-400"></i>
+                                Q: 為什麼我進遊戲左下角麥克風圖示畫斜線 (🚫)？
+                            </h4>
+                            <p class="text-slate-300 text-xs leading-relaxed pl-6">
+                                A: 請確認你電腦裡是否有正確將 Voice Chat Mod 放入 mods 資料夾，或者嘗試按 <code class="text-cyan-400 font-mono">V</code> 鍵檢查輸入設備（麥克風）是否選擇正確！
+                            </p>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="bg-slate-900/60 border border-slate-700 p-4 space-y-1.5">
+                            <h4 class="font-bold text-amber-300 text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-circle-info text-amber-400"></i>
+                                Q: 大家都聽得到我講話嗎？
+                            </h4>
+                            <p class="text-slate-300 text-xs leading-relaxed pl-6">
+                                A: 這不是全服通話！只有在你身邊 <b>48 格內</b> 的玩家才聽得到你的聲音，並且聲音會根據距離遠近遞減，距離越遠聲音越小喔！
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= 4. 常用指令頁面 ================= -->
+        <section id="page-commands" class="page-content hidden max-w-4xl mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-3">
+                <i class="fa-solid fa-terminal text-cyan-400 mr-2"></i>常用指令 Common Commands
+            </h2>
+            <p class="text-center text-slate-400 text-sm mb-8">熟悉伺服器基礎與懸賞指令，讓你的生存冒險更順手！</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+
+                <!-- /tpa -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-2xl text-cyan-400 font-bold">/tpa &lt;玩家ID&gt;</code>
+                            <span class="text-xs bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5">玩家傳送</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            請求傳送到該玩家身邊。
+                        </p>
+                    </div>
+                    <div class="mt-4 bg-slate-900/80 border border-slate-700 p-2.5 text-xs text-amber-300">
+                        <i class="fa-solid fa-circle-exclamation mr-1"></i>傳送時必須在原地<b>靜止等待 5 秒</b>，期間移動或受到任何傷害傳送會直接取消。
+                    </div>
+                </div>
+
+                <!-- /tpaccept -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-2xl text-cyan-400 font-bold">/tpaccept &lt;玩家ID&gt;</code>
+                            <span class="text-xs bg-cyan-950 text-cyan-300 border border-cyan-800 px-2 py-0.5">接受傳送</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            接受其他玩家向你發送的傳送請求。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- /sethome -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-2xl text-emerald-400 font-bold">/sethome</code>
+                            <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5">設定家</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            在你當前踩的位置設定一個「家」。
+                        </p>
+                    </div>
+                    <div class="mt-4 bg-slate-900/80 border border-slate-700 p-2.5 text-xs text-emerald-300">
+                        <i class="fa-solid fa-house-user mr-1"></i>普通玩家限制最多只能設定 <b>3 個家</b>，請謹慎選擇蓋基地的地方。
+                    </div>
+                </div>
+
+                <!-- /home -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-2xl text-emerald-400 font-bold">/home</code>
+                            <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5">傳送回家</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            瞬間傳回你設定的家。
+                        </p>
+                    </div>
+                    <div class="mt-4 bg-slate-900/80 border border-slate-700 p-2.5 text-xs text-amber-300">
+                        <i class="fa-solid fa-clock mr-1"></i>同樣需要<b>原地等待 5 秒</b>，戰鬥中受傷會打斷傳送。
+                    </div>
+                </div>
+
+                <!-- /shop -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-2xl text-yellow-400 font-bold">/shop</code>
+                            <span class="text-xs bg-yellow-950 text-yellow-300 border border-yellow-800 px-2 py-0.5">系統商店</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            開啟伺服器官方商店選單進行購買（可買 PvP 物資、生怪籠等）。
+                        </p>
+                    </div>
+                    <div class="mt-4 bg-red-950/60 border border-red-800/80 p-2.5 text-xs text-red-300 font-bold">
+                        <i class="fa-solid fa-swords mr-1"></i>特別注意：戰鬥中也可以使用 /shop！
+                    </div>
+                </div>
+
+                <!-- /sellgui -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-2xl text-yellow-400 font-bold">/sellgui</code>
+                            <span class="text-xs bg-yellow-950 text-yellow-300 border border-yellow-800 px-2 py-0.5">物品販售</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            開啟販售物品介面。將要賣掉換錢的物品放入視窗內即可一鍵賣出。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- /bounty set -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-xl text-red-400 font-bold">/bounty set &lt;玩家&gt; &lt;金額&gt;</code>
+                            <span class="text-xs bg-red-950 text-red-300 border border-red-800 px-2 py-0.5">發布懸賞</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            懸賞捉拿一名玩家。成功擊殺目標的玩家將可獲得賞金！
+                        </p>
+                    </div>
+                </div>
+
+                <!-- /bounty remove -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-xl text-red-400 font-bold">/bounty remove &lt;玩家&gt;</code>
+                            <span class="text-xs bg-red-950 text-red-300 border border-red-800 px-2 py-0.5">取消懸賞</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            取消你對該玩家設定的懸賞金額（僅會獲得部分退款）。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- /bounty list -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-xl text-red-400 font-bold">/bounty list [頁數]</code>
+                            <span class="text-xs bg-red-950 text-red-300 border border-red-800 px-2 py-0.5">懸賞列表</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            查看全服所有目前有效的通緝賞金名單。
+                        </p>
+                    </div>
+                </div>
+
+                <!-- /bounty top -->
+                <div class="bg-slate-800/90 border-4 border-black p-5 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <code class="mc-font text-xl text-red-400 font-bold">/bounty top</code>
+                            <span class="text-xs bg-red-950 text-red-300 border border-red-800 px-2 py-0.5">獵人排行</span>
+                        </div>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            查看伺服器中最出色的頂級賞金獵人排行榜。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= 5. 完整伺服器規則頁面 ================= -->
+        <section id="page-rules" class="page-content hidden max-w-4xl mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-3">
+                <i class="fa-solid fa-shield-halved text-red-500 mr-2"></i>遊戲守則 Minecraft Server Rules
+            </h2>
+            <p class="text-center text-slate-400 text-sm mb-8">請全體玩家切實遵守，維護公平優質的遊戲環境。</p>
+
+            <div class="space-y-8">
+
+                <!-- 分類 1：核心禁止事項 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 shadow-xl">
+                    <h3 class="text-xl font-bold text-red-400 border-b border-red-500/30 pb-2 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> 🚨 核心禁止事項（觸犯將直接封禁）
+                    </h3>
+                    
+                    <div class="bg-red-950/40 border border-red-800/60 p-3 mb-4 text-xs text-red-300 flex items-center gap-2">
+                        <i class="fa-solid fa-robot text-base"></i>
+                        <span>伺服器配備自編反作弊偵測系統，請勿抱持僥倖心態以身試法！</span>
+                    </div>
+
+                    <ul class="space-y-2.5 text-slate-300 text-sm">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁使用外掛作弊端</b>：禁止使用任何形式的作弊客戶端（如 <code class="bg-slate-900 text-red-300 px-1.5 py-0.5 rounded text-xs font-mono">Meteor</code>、<code class="bg-slate-900 text-red-300 px-1.5 py-0.5 rounded text-xs font-mono">Wurst</code>）。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁移動類外掛</b>：禁止使用修改移動速度、飛行、反擊退或非原版移動機制的模組。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁背包與物品欄優化外掛</b>：禁止使用會自動整理、自動抽取的背包相關外掛。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁血量顯示輔助</b>：禁止使用機能看見其他玩家或怪物精確血量的顯示功能。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁雷達功能</b>：禁止使用任何形式的玩家或小地圖雷達。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁靈魂出竅自由視角</b>：禁止使用 <code class="bg-slate-900 text-red-300 px-1.5 py-0.5 rounded text-xs font-mono">Freecam</code> 自由視角功能。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁透視功能</b>：禁止使用透視玩家、箱子、方塊或礦物的 <code class="bg-slate-900 text-red-300 px-1.5 py-0.5 rounded text-xs font-mono">ESP</code> 功能。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁自動便捷放置方塊</b>：禁止使用自動放置方塊或任意角度強行放置方塊的功能。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁巨集與腳本</b>：禁止使用任何形式的自動化巨集軟體或按鍵腳本。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁連點器</b>：禁止使用任何形式的自動連點器。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁滑鼠輔助滾輪優化</b>：禁止使用 <code class="bg-slate-900 text-red-300 px-1.5 py-0.5 rounded text-xs font-mono">Mouse Tweaks</code> 或利用滾輪快速移動物品等相關優化功能。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-xmark text-red-400 mt-1"></i>
+                            <span><b>嚴禁修改合成機制</b>：禁止使用任何修改或加速原版合成邏輯的客戶端功能。</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 分類 2：遊戲漏洞與公平性 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 shadow-xl">
+                    <h3 class="text-xl font-bold text-amber-400 border-b border-amber-500/30 pb-2 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-bug"></i> ⚠️ 遊戲漏洞與公平性
+                    </h3>
+                    <ul class="space-y-2.5 text-slate-300 text-sm">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-amber-400 mt-1"></i>
+                            <span><b>嚴禁惡意利用 Bug</b>：禁止惡意利用遊戲內的任何漏洞、錯誤或異常機制。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-amber-400 mt-1"></i>
+                            <span><b>嚴禁嘗試與執行複製</b>：任何嘗試尋找、測試或複製物品漏洞的行為皆不被允許。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-amber-400 mt-1"></i>
+                            <span><b>每人帳號上限為 5 個</b>：同一位玩家在伺服器內最多只能使用 5 個不同的帳號。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-angle-right text-amber-400 mt-1"></i>
+                            <span><b>嚴禁查詢與使用地圖種子碼</b>：禁止透過任何手段尋找、破解或利用本世界的地圖種子來搜尋結構與礦物。</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 分類 3：社交、推廣與社交規範 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 shadow-xl">
+                    <h3 class="text-xl font-bold text-blue-400 border-b border-blue-500/30 pb-2 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-comments"></i> 💬 聊天室與社交規範 Chat Rules
+                    </h3>
+                    <ul class="space-y-2.5 text-slate-300 text-sm">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-small text-blue-400 mt-1.5 text-xs"></i>
+                            <span><b>嚴禁惡意刷屏與廣告</b>：禁止在聊天室發送重複訊息、煽動刷屏，或宣傳其他伺服器/商業連結。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-small text-blue-400 mt-1.5 text-xs"></i>
+                            <span><b>零容忍言語騷擾與歧視</b>：禁止持續性言語騷擾、辱罵、霸凌，以及種族、性別、宗教等歧視言論。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-small text-blue-400 mt-1.5 text-xs"></i>
+                            <span><b>嚴禁死亡威脅與洩漏隱私</b>：禁止發表人身安全/死亡威脅，以及公開、散布他人真實姓名、照片等個資。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-small text-blue-400 mt-1.5 text-xs"></i>
+                            <span><b>嚴禁假冒管理團隊</b>：禁止假冒、自稱是工作人員或代表官方發言。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-small text-blue-400 mt-1.5 text-xs"></i>
+                            <span><b>嚴禁邀請/衝能欺詐與外部賭博</b>：禁止偽造邀請獎勵、騙取 Discord Boost 獎勵，或進行外圍賭博。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-small text-blue-400 mt-1.5 text-xs"></i>
+                            <span><b>嚴禁語音音訊轟炸</b>：禁止在近距離語音聊天中播放噪音、高分貝音樂或惡意刷屏。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-small text-blue-400 mt-1.5 text-xs"></i>
+                            <span><b>嚴禁惡意規避處罰</b>：若帳號遭封鎖，嚴禁使用分身小號繞過處罰。</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-circle-small text-blue-400 mt-1.5 text-xs"></i>
+                            <span><b>主動回報義務</b>：若發現任何 Bug 或作弊玩家，請務必第一時間回報管理團隊。</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 分類 4：管理團隊終極提醒 -->
+                <div class="bg-amber-950/40 border-4 border-black p-6 text-center space-y-3 shadow-xl">
+                    <h3 class="text-xl font-black text-yellow-400 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-gavel"></i> 💡 管理團隊終極提醒 Use Common Sense
+                    </h3>
+                    <p class="text-sm font-bold text-amber-200">
+                        請保持基本的常識與理性！
+                    </p>
+                    <p class="text-xs text-slate-300 leading-relaxed max-w-2xl mx-auto">
+                        有些事情即便條文上沒有明確列出，但只要違反了正常人的基本常理，且會對伺服器帶來不良影響，管理團隊依然有全權對你進行封禁處分。請珍惜自己的帳號，理性遊戲！
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================= 6. 伺服器內商店頁面 ================= -->
+        <section id="page-shop" class="page-content hidden max-w-4xl mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-3">
+                <i class="fa-solid fa-store text-yellow-400 mr-2"></i>伺服器商店系統 Shop System
+            </h2>
+            <p class="text-center text-slate-400 text-sm mb-8">輕鬆購買實用物資，快捷賣出物品賺取金幣！</p>
+
+            <div class="grid md:grid-cols-2 gap-6 mb-8">
+                <!-- /shop 系統商店 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                        <code class="mc-font text-3xl text-yellow-400 font-bold">/shop</code>
+                        <span class="text-xs bg-yellow-950 text-yellow-300 border border-yellow-800 px-2 py-0.5">系統商店</span>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        開啟官方系統商店選單，可選購多種生存與戰鬥實用物資：
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-swords text-yellow-400"></i> <b>PvP 戰鬥物資</b>（神裝、藥水、金蘋果等戰術道具）</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-box text-yellow-400"></i> <b>生怪籠 (Monster Spawner)</b> 與各類稀有方塊</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-cube text-yellow-400"></i> 多種日常生存必備材料</li>
+                    </ul>
+                </div>
+
+                <!-- /sellgui 快捷售物 -->
+                <div class="bg-slate-800/90 border-4 border-black p-6 space-y-4">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                        <code class="mc-font text-3xl text-emerald-400 font-bold">/sellgui</code>
+                        <span class="text-xs bg-emerald-950 text-emerald-300 border border-emerald-800 px-2 py-0.5">快捷售物</span>
+                    </div>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        開啟便捷的賣東西 GUI 介面：
+                    </p>
+                    <ul class="space-y-2 text-xs text-slate-300">
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-hand-holding-dollar text-emerald-400"></i> 將想要賣出的多餘物品直接放入視窗</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-400"></i> 關閉視窗即可一鍵自動結算獲取金幣</li>
+                        <li class="flex items-center gap-2"><i class="fa-solid fa-bolt text-emerald-400"></i> 快速變現，省去繁瑣交易過程</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 提醒卡片 -->
+            <div class="bg-slate-900/80 border-2 border-slate-700 p-4 text-center text-xs text-slate-400">
+                <i class="fa-solid fa-circle-info text-yellow-400 mr-1"></i>
+                <b>提示：</b>本伺服器無玩家間的市場指令 (<code class="text-yellow-400 font-mono">/market</code>)，所有買賣皆經由 <code class="text-yellow-400 font-mono">/shop</code> 系統商店與 <code class="text-yellow-400 font-mono">/sellgui</code> 快捷售物完成。
+            </div>
+        </section>
+
+        <!-- ================= 7. 贊助資訊頁面 ================= -->
+        <section id="page-vip" class="page-content hidden max-w-6xl mx-auto px-4 py-16">
+            <h2 class="text-3xl font-bold text-center mb-4"><i class="fa-solid fa-gem text-amber-400 mr-2"></i>贊助與身分組</h2>
+            <p class="text-slate-400 text-center mb-12">贊助資金將全數用於伺服器硬體升級與續約</p>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- + 身分 -->
+                <div class="bg-slate-800/80 border-4 border-black p-8 text-center flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-3xl font-black text-blue-400 mb-2 mc-font">+ 身分</h3>
+                        <div class="text-4xl font-extrabold mb-6 mc-font">NT$ 150</div>
+                        <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>10 個 Home 點</b></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                        </ul>
+                    </div>
+                    <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="mc-btn w-full">前往 Discord 贊助</a>
+                </div>
+
+                <!-- ++ 身分 -->
+                <div class="bg-slate-800 border-4 border-indigo-500 p-8 text-center flex flex-col justify-between relative glow">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-indigo-600 border-2 border-black text-xs uppercase font-extrabold px-3 py-1">熱門推薦</div>
+                    <div>
+                        <h3 class="text-3xl font-black text-indigo-400 mb-2 mc-font">++ 身分</h3>
+                        <div class="text-4xl font-extrabold mb-6 mc-font">NT$ 500</div>
+                        <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>15 個 Home 點</b></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                        </ul>
+                    </div>
+                    <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="mc-btn mc-btn-indigo w-full">前往 Discord 贊助</a>
+                </div>
+
+                <!-- +++ 身分 -->
+                <div class="bg-slate-800/80 border-4 border-black p-8 text-center flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-3xl font-black text-amber-400 mb-2 mc-font">+++ 身分</h3>
+                        <div class="text-4xl font-extrabold mb-6 mc-font">NT$ 1000</div>
+                        <ul class="text-slate-300 text-left space-y-3 mb-8 text-sm">
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> 解鎖 <b>35 個 Home 點</b></li>
+                            <li class="flex items-center gap-2"><i class="fa-solid fa-check text-green-400"></i> Discord 專屬身份組</li>
+                        </ul>
+                    </div>
+                    <a href="https://discord.gg/Y4jRcwAuRn" target="_blank" class="mc-btn mc-btn-gold w-full">前往 Discord 贊助</a>
+                </div>
+            </div>
+
+            <p class="text-center text-slate-400 text-sm mt-8">💡 更多詳細權益請至 Discord 開啟客服單諮詢。</p>
+        </section>
+
+        <!-- ================= 8. 開發人員頁面 ================= -->
+        <section id="page-staff" class="page-content hidden max-w-6xl mx-auto px-4 py-16">
+            <h2 class="text-3xl font-bold text-center mb-12"><i class="fa-solid fa-code text-purple-400 mr-2"></i>開發人員與管理團隊</h2>
+            <div class="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                
+                <!-- DuskyL -->
+                <div class="bg-slate-800/80 border-4 border-black p-6 flex items-center gap-6">
+                    <img src="https://mc-heads.net/avatar/DuskyL" alt="DuskyL" class="w-16 h-16 border-2 border-black">
+                    <div>
+                        <h3 class="text-xl font-bold">DuskyL</h3>
+                        <span class="bg-red-500/20 text-red-400 border border-red-500/30 text-xs px-2.5 py-0.5 rounded font-semibold inline-block mt-1">服主 / 開發人員</span>
+                        <p class="text-slate-400 text-sm mt-2">負責伺服器核心規劃、插件開發與營運管理。</p>
+                    </div>
+                </div>
+
+                <!-- Young -->
+                <div class="bg-slate-800/80 border-4 border-black p-6 flex items-center gap-6">
+                    <img src="https://mc-heads.net/avatar/Young" alt="Young" class="w-16 h-16 border-2 border-black">
+                    <div>
+                        <h3 class="text-xl font-bold">Young</h3>
+                        <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded font-semibold inline-block mt-1">機主 / 開發人員</span>
+                        <p class="text-slate-400 text-sm mt-2">負責伺服器硬體託管、網路連線優化與效能調校。</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 頁尾 -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-8 text-center text-slate-500 text-xs">
+        <p>&copy; 2026 TaiwanSMP. All rights reserved. Not an official Minecraft product.</p>
+    </footer>
+
+    <!-- 腳本邏輯 -->
+    <script>
+        // 一鍵複製 IP
+        function copyIP() {
+            const ip = document.getElementById("server-ip").innerText;
+            navigator.clipboard.writeText(ip).then(() => {
+                const btnText = document.getElementById("copy-btn-text");
+                btnText.innerText = "已複製！";
+                setTimeout(() => {
+                    btnText.innerText = "複製 IP";
+                }, 2000);
+            });
+        }
+
+        // 漢堡選單控制
+        const menuBtn = document.getElementById('menu-btn');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const menuIcon = menuBtn.querySelector('i');
+
+        menuBtn.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('hidden');
+            if (dropdownMenu.classList.contains('hidden')) {
+                menuIcon.classList.remove('fa-xmark');
+                menuIcon.classList.add('fa-bars');
+            } else {
+                menuIcon.classList.remove('fa-bars');
+                menuIcon.classList.add('fa-xmark');
+            }
+        });
+
+        // 頁面切換控制
+        function switchPage(pageId) {
+            const pages = document.querySelectorAll('.page-content');
+            pages.forEach(page => page.classList.add('hidden'));
+
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+
+            dropdownMenu.classList.add('hidden');
+            menuIcon.classList.remove('fa-xmark');
+            menuIcon.classList.add('fa-bars');
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
